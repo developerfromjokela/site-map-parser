@@ -25,7 +25,7 @@ def test_download_uri_data_sitemap_xml_index():
 
 def test_download_uri_data_urlset():
     with requests_mock.mock() as m:
-        us_data = open('tests/urlset_a.xml', 'rb').read()
+        us_data = open('urlset_a.xml', 'rb').read()
         m.get('http://www.example.com/urlset_a.xml', content=us_data)
         downloaded_data = download_uri_data('http://www.example.com/urlset_a.xml')
         assert downloaded_data == us_data

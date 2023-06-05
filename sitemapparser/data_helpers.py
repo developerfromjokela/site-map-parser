@@ -26,7 +26,7 @@ def download_uri_data(uri):
         file = tempfile.mktemp(prefix="archive-", suffix=os.path.basename(a.path))
         folder = tempfile.mkdtemp('convrs-result')
         Path(file).write_bytes(r.content)
-        cmd = ['7z', 'e', file, '-o' + folder]
+        cmd = ['7z', 'e', file, '-o' + folder+'/']
         sp = subprocess.Popen(cmd, stderr=subprocess.STDOUT, stdout=subprocess.PIPE)
         sp.wait(60000)
 
