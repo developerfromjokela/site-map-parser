@@ -1,8 +1,14 @@
 import logging
-import requests
+import os
+import subprocess
+import tempfile
 from io import BytesIO
-from lxml import etree
+from pathlib import Path
 # use Bytes throughout because that's how lxml says XML should be used
+from urllib.parse import urlparse
+
+import requests
+from lxml import etree
 
 
 def download_uri_data(uri):
@@ -12,10 +18,24 @@ def download_uri_data(uri):
     logger = logging.getLogger(__name__)
     logger.info('Requesting data from: {}'.format(uri))
     # using requests to follow any redirects that happen
-    headers = {'Content-Type': 'application/xml;charset=utf-8'}
-    r = requests.get(uri, headers=headers)
+    r = requests.get(uri)
     # ensure it's the decompressed content
     r.raw.decode_content = True
+    try:
+        a = urlparse(uri)
+        file = tempfile.mktemp(prefix="archive-", suffix=os.path.basename(a.path))
+        folder = tempfile.mkdtemp('convrs-result')
+        Path(file).write_bytes(r.content)
+        cmd = ['7z', 'e', file, '-o' + folder]
+        sp = subprocess.Popen(cmd, stderr=subprocess.STDOUT, stdout=subprocess.PIPE)
+        sp.wait(60000)
+
+        items = os.listdir(folder)
+        if len(items) > 0:
+            return Path(os.path.join(folder, items[0])).read_text('utf-8')
+    except Exception as e:
+        print(e)
+
     logger.debug("Request content: {}".format(r.content))
     return r.content
 

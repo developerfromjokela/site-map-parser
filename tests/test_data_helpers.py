@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pytest
 from unittest.mock import Mock
 import requests
@@ -12,6 +14,14 @@ def test_download_uri_data_sitemap_index():
         downloaded_data = download_uri_data('http://www.example.com/sitemapindex.xml')
         assert downloaded_data == smi_data
 
+def test_download_uri_data_sitemap_xml_index():
+    with requests_mock.mock() as m:
+        smi_data = open('sitemap_main.xml.gz', 'rb').read()
+        smi_uncompressed_data = Path('sitemap_main.xml').read_text('utf-8')
+        m.get('http://www.example.com/sitemapindex.xml.gz', content=smi_data)
+        downloaded_data = download_uri_data('http://www.example.com/sitemapindex.xml.gz')
+        print(downloaded_data)
+        assert downloaded_data == smi_uncompressed_data
 
 def test_download_uri_data_urlset():
     with requests_mock.mock() as m:
