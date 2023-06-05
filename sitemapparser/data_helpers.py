@@ -32,7 +32,7 @@ def download_uri_data(uri):
 
         items = os.listdir(folder)
         if len(items) > 0:
-            return Path(os.path.join(folder, items[0])).read_text('utf-8')
+            return Path(os.path.join(folder, items[0]))
     except Exception as e:
         print(e)
 
