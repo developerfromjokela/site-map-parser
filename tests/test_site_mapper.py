@@ -6,12 +6,12 @@ from sitemapparser.site_map_parser import SiteMapParser
 
 class TestSiteMapper:
     def setup(self):
-        sitemap_index_data = open('tests/sitemap_index_data.xml', 'rb').read()
+        sitemap_index_data = open('sitemap_index_data.xml', 'rb').read()
         utf8_parser = etree.XMLParser(encoding='utf-8')
         self.sitemap_index_xml_root = etree.parse(BytesIO(sitemap_index_data), parser=utf8_parser).getroot()
         self.sitemap_index_element_xml = self.sitemap_index_xml_root[0]
 
-        url_set_data_bytes = open('tests/urlset_a.xml', 'rb').read()
+        url_set_data_bytes = open('urlset_a.xml', 'rb').read()
         utf8_parser = etree.XMLParser(encoding='utf-8')
         self.url_set_data_xml = etree.parse(BytesIO(url_set_data_bytes), parser=utf8_parser)
         self.url_set_element = self.url_set_data_xml.getroot()
@@ -37,6 +37,11 @@ class TestSiteMapper:
             sm = SiteMapParser('http://www.sitemap-example.com')
             site_maps = sm.get_sitemaps()
             assert len(list(site_maps)) == 2
+
+    def test_live(self):
+        sm = SiteMapParser('https://www.elledecor.com/en/sitemaps/content.2016-11-29T23:38:55.xml.gz')
+        site_maps = sm.get_urls()
+        print(len(list(site_maps)))
 
     def test_get_sitemaps_inappropriate_call(self):
         with requests_mock.mock() as m:

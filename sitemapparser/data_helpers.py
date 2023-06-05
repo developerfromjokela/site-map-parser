@@ -1,6 +1,7 @@
 import logging
 import os
 import subprocess
+import sys
 import tempfile
 from io import BytesIO
 from pathlib import Path
@@ -27,12 +28,12 @@ def download_uri_data(uri):
         folder = tempfile.mkdtemp('convrs-result')
         Path(file).write_bytes(r.content)
         cmd = ['7z', 'e', file, '-o' + folder+'/']
-        sp = subprocess.Popen(cmd, stderr=subprocess.STDOUT, stdout=subprocess.PIPE)
+        sp = subprocess.Popen(cmd, stderr=sys.stdout, stdout=sys.stdout)
         sp.wait(60000)
 
         items = os.listdir(folder)
         if len(items) > 0:
-            return Path(os.path.join(folder, items[0]))
+            return Path(os.path.join(folder, items[0])).read_bytes()
     except Exception as e:
         print(e)
 
