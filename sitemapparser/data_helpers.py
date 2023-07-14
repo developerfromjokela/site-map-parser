@@ -8,8 +8,12 @@ from pathlib import Path
 # use Bytes throughout because that's how lxml says XML should be used
 from urllib.parse import urlparse
 
+import cloudscraper
 import requests
 from lxml import etree
+
+scraper = cloudscraper.create_scraper(interpreter='nodejs')
+
 
 
 def download_uri_data(uri):
@@ -19,7 +23,7 @@ def download_uri_data(uri):
     logger = logging.getLogger(__name__)
     logger.info('Requesting data from: {}'.format(uri))
     # using requests to follow any redirects that happen
-    r = requests.get(uri)
+    r = scraper.get(uri)
     # ensure it's the decompressed content
     r.raw.decode_content = True
     try:

@@ -4,3 +4,16 @@ pytest-cov==3.0.0
 python-dateutil==2.8.2
 requests==2.27.1
 requests-mock==1.9.3
+
+attrs~=23.1.0
+urllib3~=1.26.16
+six~=1.16.0
+py~=1.11.0
+wheel~=0.40.0
+idna~=3.4
+cryptography~=41.0.1
+pluggy~=1.0.0
+chardet~=5.1.0
+certifi~=2023.5.7
+setuptools~=67.7.2
+cloudscraper~=1.2.71
